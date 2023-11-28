@@ -1,0 +1,41 @@
+on: 
+  workflow_dispatch:
+    inputs:
+
+name: Create React Native App linux
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Create React Native project
+        run: npx react-native@latest init MyApp
+
+      - uses: mikeal/publish-to-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: 'main'
+
+      - name: Move files
+        run: |
+          set -e
+          mv -n MyApp/* .
+          mv -n MyApp/.* .
+          rmdir MyApp || true
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "Your Name"
+          git config --global user.email "your-email@example.com"
+          git add -A
+          git commit -m "Move files from MyApp folder"
+          git push
