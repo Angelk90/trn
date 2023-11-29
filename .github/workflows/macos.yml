@@ -2,7 +2,7 @@ on:
   workflow_dispatch:
     inputs:
 
-name: Create React Native App linux
+name: Create React Native App macos
 
 jobs:
   build:
