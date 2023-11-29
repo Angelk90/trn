@@ -1,4 +1,4 @@
-on: 
+on:
   workflow_dispatch:
     inputs:
 
@@ -20,7 +20,14 @@ jobs:
       - name: Create React Native project
         run: npx react-native@latest init MyApp
 
-      - uses: mikeal/publish-to-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH_NAME: 'main'
+      - name: Commit changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "your-email@example.com"
+          git add -A
+          git commit -m "Add MyApp folder"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
