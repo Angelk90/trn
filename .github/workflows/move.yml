@@ -1,0 +1,28 @@
+on: 
+  workflow_dispatch:
+    inputs:
+
+name: Move Files
+
+jobs:
+  move-files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Move files
+        run: |
+          set -e
+          mv -n MyApp/* .
+          mv -n MyApp/.* .
+          rmdir MyApp || true
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "Your Name"
+          git config --global user.email "your-email@example.com"
+          git add -A
+          git commit -m "Move files from MyApp folder"
+          git push
